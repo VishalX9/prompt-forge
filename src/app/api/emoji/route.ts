@@ -1,6 +1,5 @@
-import { NextResponse ,NextRequest} from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { GoogleGenAI, Modality } from "@google/genai";
-
 
 const genAI = new GoogleGenAI({
   apiKey: process.env.GEMINI_KEY,
@@ -13,14 +12,22 @@ export async function POST(req: NextRequest) {
     if (!promptText) {
       return NextResponse.json({ error: "Prompt is required." }, { status: 400 });
     }
+
     
-    
+    const emojiPrompt = `
+You are an AI that generates custom emoji-style images based on creative prompts. 
+Always output the subject in a clean, colourful, high-quality *emoji art style*, not realistic. 
+Make the design simple, visually expressive, and fit in a square emoji format.
+
+Prompt: "${promptText}"
+    `.trim();
+
     const imageResponse = await genAI.models.generateContent({
       model: "gemini-2.0-flash-preview-image-generation",
       contents: [
         {
           role: "user",
-          parts: [{ text: promptText }],
+          parts: [{ text: emojiPrompt }],
         },
       ],
       config: {
@@ -43,6 +50,7 @@ export async function POST(req: NextRequest) {
 
     const imageUrl = `data:image/png;base64,${imagePart.inlineData.data}`;
 
+ 
     const descriptionPrompt = `Provide a concise, creative description of an emoji based on the following prompt: "${promptText}". The description should be 1-2 sentences, capturing the essence and style of the emoji.`;
 
     const descriptionResponse = await genAI.models.generateContent({
@@ -72,8 +80,6 @@ export async function POST(req: NextRequest) {
     }
 
     const description = descriptionPart.text;
-
-    
 
     return NextResponse.json(
       {

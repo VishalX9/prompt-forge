@@ -26,7 +26,7 @@ export default function EmojiPromptPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
+          Accept: 'application/json',
         },
         body: JSON.stringify({ promptText: promptText.trim() }),
       });
@@ -54,12 +54,42 @@ export default function EmojiPromptPage() {
     }
   };
 
+  const downloadImage = () => {
+    if (!image) return;
+
+    const link = document.createElement('a');
+    link.href = image;
+    link.download = 'custom-emoji.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const shareImage = async () => {
+    if (navigator.share && image) {
+      try {
+        await navigator.share({
+          title: 'Check out this AI-generated emoji!',
+          text: description || 'Custom emoji made with AI 🎨',
+          url: image,
+        });
+        return;
+      } catch (error) {
+        console.error('Share failed:', error);
+      }
+    }
+
+    // fallback to copy URL
+    try {
+      await navigator.clipboard.writeText(image!);
+      alert('Image URL copied to clipboard!');
+    } catch (err) {
+      alert('Failed to copy image URL.');
+    }
+  };
+
   return (
-    <div
-      className="min-h-screen relative overflow-hidden"
-      data-color="blue" 
-    >
-   
+    <div className="min-h-screen relative overflow-hidden" data-color="blue">
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-20 left-20 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
         <div className="absolute top-40 right-20 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse animation-delay-2000"></div>
@@ -67,7 +97,6 @@ export default function EmojiPromptPage() {
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 py-12">
-     
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full mb-6 shadow-2xl transform hover:scale-110 transition-transform duration-300">
             <span className="text-3xl">🪄</span>
@@ -145,15 +174,19 @@ export default function EmojiPromptPage() {
                     />
                   </div>
                   {description && (
-                    <p className="text-gray-600 text-lg italic leading-relaxed">
-                      "{description}"
-                    </p>
+                    <p className="text-gray-600 text-lg italic leading-relaxed">"{description}"</p>
                   )}
                   <div className="mt-6 flex gap-3 justify-center">
-                    <button className="px-6 py-2 bg-white/50 hover:bg-white/70 text-gray-800 rounded-xl transition-colors duration-300 border border-gray-200">
+                    <button
+                      onClick={downloadImage}
+                      className="px-6 py-2 bg-white/50 hover:bg-white/70 text-gray-800 rounded-xl transition-colors duration-300 border border-gray-200"
+                    >
                       Download
                     </button>
-                    <button className="px-6 py-2 bg-white/50 hover:bg-white/70 text-gray-800 rounded-xl transition-colors duration-300 border border-gray-200">
+                    <button
+                      onClick={shareImage}
+                      className="px-6 py-2 bg-white/50 hover:bg-white/70 text-gray-800 rounded-xl transition-colors duration-300 border border-gray-200"
+                    >
                       Share
                     </button>
                   </div>
