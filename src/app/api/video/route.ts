@@ -1,10 +1,7 @@
-// src/app/api/video/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
 import RunwayML, { TaskFailedError } from "@runwayml/sdk";
 
-// Define a type for the exact ratio strings expected by RunwayML.
-// This union type comes directly from the TypeScript error message.
 type RunwayMLRatio =
   | "1280:720"
   | "720:1280"
@@ -15,30 +12,22 @@ type RunwayMLRatio =
   | "1280:768"
   | "768:1280";
 
-// Initialize RunwayML client with API key from environment variables.
-// The '!' asserts that the environment variable will be defined,
-// but robust error handling for its absence is also included below.
 const client = new RunwayML({
   apiKey: process.env.RUNWAYML_API_SECRET!,
 });
 
-// A default image URL to be used as the promptImage for RunwayML.
-// This is required by RunwayML's imageToVideo model.
-// Updated to use a more reliable placeholder image service.
 
 const DEFAULT_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Hopetoun_falls.jpg/640px-Hopetoun_falls.jpg";
 
-// Map user-friendly aspect ratio strings to RunwayML's required pixel dimensions.
-// Updated to include all ratios from the error message.
 const ratioMap: Record<string, RunwayMLRatio> = {
-  "16:9": "1280:720", // Landscape (Standard HD)
-  "9:16": "720:1280", // Portrait (Standard HD Vertical)
-  "1:1": "960:960",   // Square (Common for social media)
-  "4:3": "1104:832",  // Traditional TV/Monitor (approx)
-  "3:4": "832:1104",  // Traditional TV/Monitor Vertical (approx)
-  "21:9": "1584:672", // Ultrawide (approx)
-  "5:3": "1280:768",  // Wider than 16:9 (approx)
-  "3:5": "768:1280",  // Taller than 9:16 (approx)
+  "16:9": "1280:720",
+  "9:16": "720:1280",
+  "1:1": "960:960",
+  "4:3": "1104:832",
+  "3:4": "832:1104",
+  "21:9": "1584:672",
+  "5:3": "1280:768",
+  "3:5": "768:1280",
 };
 
 /**
@@ -63,14 +52,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Destructure and provide default values for incoming parameters.
     const {
       promptText,
-      aspectRatio = '16:9', // Default to 16:9 if not provided
-      duration = 5,       // Default to 5 seconds if not provided
+      aspectRatio = '16:9',
+      duration = 5,
     } = body;
 
-    // --- Input Validation ---
 
     if (!promptText || typeof promptText !== 'string' || promptText.trim().length === 0) {
       return NextResponse.json(
@@ -79,9 +66,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Resolve the aspect ratio using the map.
-    // Explicitly cast to RunwayMLRatio to satisfy TypeScript, as we know the map
-    // only contains valid RunwayMLRatio values.
     const resolvedRatio: RunwayMLRatio | undefined = ratioMap[aspectRatio];
 
     if (!resolvedRatio) {
@@ -99,7 +83,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check for RunwayML API key presence.
     if (!process.env.RUNWAYML_API_SECRET) {
       console.error('RUNWAYML_API_SECRET not found in environment variables.');
       return NextResponse.json(
@@ -115,21 +98,19 @@ export async function POST(request: NextRequest) {
       promptImage: DEFAULT_IMAGE,
     });
 
-    // --- Call RunwayML API ---
     const task = await client.imageToVideo.create({
       model: 'gen4_turbo',
-      promptImage: DEFAULT_IMAGE, // Using a default image as per your previous code
+      promptImage: DEFAULT_IMAGE,
       promptText: promptText.trim(),
-      ratio: resolvedRatio, // Use the resolved pixel dimensions, now correctly typed
+      ratio: resolvedRatio,
       duration,
     });
 
     console.log('Task created, waiting for output...');
-    const result = await (task as any).waitForTaskOutput(); // Cast to 'any' for waitForTaskOutput
+    const result = await (task as any).waitForTaskOutput();
 
     console.log('RunwayML Task result status:', result.status);
 
-    // Check if the task succeeded.
     if (result.status !== 'SUCCEEDED' && result.status !== 'succeeded') {
       console.error('RunwayML video generation failed:', result);
       return NextResponse.json(
@@ -142,8 +123,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // --- Extract Video URL ---
-    // Robustly try to find the video URL from various possible paths in the result object.
     const videoUrl =
       result?.output?.videoUrl ||
       result?.output?.video ||
@@ -166,13 +145,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       videoUrl,
-      taskId: result.id, // Optionally return task ID for debugging/tracking
+      taskId: result.id,
     });
 
   } catch (error) {
     console.error('API Error during video generation:', error);
 
-    // Provide more specific error messages if it's a known RunwayML error type.
     let errorMessage = 'Unknown error during video generation.';
     if (error instanceof TaskFailedError) {
       errorMessage = `RunwayML task failed: ${error.message}`;

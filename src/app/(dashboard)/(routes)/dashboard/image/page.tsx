@@ -143,10 +143,9 @@ const ImageGeneratorPage = () => {
     { id: "abstract", name: "Abstract", preview: "🌀", color: "green" },
   ];
 
-  // Dynamically set page background based on selectedStyle
   useEffect(() => {
     const selectedPreset = stylePresets.find((style) => style.id === selectedStyle);
-    const color = selectedPreset?.color || "blue"; // Fallback to blue
+    const color = selectedPreset?.color || "blue";
     document.body.setAttribute("data-color", color);
   }, [selectedStyle]);
 
@@ -224,7 +223,6 @@ const ImageGeneratorPage = () => {
 
   return (
     <div className="min-h-screen" data-color="blue">
-      {/* Floating Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div
           className="absolute top-20 left-10 w-32 h-32 rounded-full opacity-20 animate-pulse"
@@ -240,7 +238,6 @@ const ImageGeneratorPage = () => {
         />
       </div>
 
-      {/* Header */}
       <div className="relative z-10 text-center py-12 px-4">
         <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg mb-6">
           <Wand2 className="w-6 h-6 text-violet-600" />
@@ -254,10 +251,8 @@ const ImageGeneratorPage = () => {
         </p>
       </div>
 
-      {/* Generation Interface */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 mb-12">
         <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/50">
-          {/* Style Selection */}
           <div className="mb-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
               <Palette className="w-5 h-5 text-violet-600" />
@@ -276,7 +271,6 @@ const ImageGeneratorPage = () => {
             </div>
           </div>
 
-          {/* Prompt Input */}
           <div className="relative">
             <div className="relative">
               <textarea
@@ -316,7 +310,6 @@ const ImageGeneratorPage = () => {
         </div>
       </div>
 
-      {/* Gallery */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 pb-12">
         {generations.length === 0 ? (
           <div className="text-center py-20">

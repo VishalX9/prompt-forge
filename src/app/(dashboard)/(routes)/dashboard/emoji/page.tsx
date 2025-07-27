@@ -11,12 +11,10 @@ export default function EmojiPromptPage() {
   const [description, setDescription] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Optional: Dynamically set page background based on prompt or context
   useEffect(() => {
-    
-    const color = 'pink'; // Replace with logic to determine color (e.g., based on promptText)
+    const color = 'blue';
     document.body.setAttribute('data-color', color);
-  }, []); 
+  }, []);
 
   const generateEmoji = async () => {
     setLoading(true);
@@ -59,9 +57,9 @@ export default function EmojiPromptPage() {
   return (
     <div
       className="min-h-screen relative overflow-hidden"
-      data-color="blue" // Set the page-specific color here
+      data-color="blue" 
     >
-      {/* Animated background elements */}
+   
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-20 left-20 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
         <div className="absolute top-40 right-20 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse animation-delay-2000"></div>
@@ -69,7 +67,7 @@ export default function EmojiPromptPage() {
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 py-12">
-        {/* Header */}
+     
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full mb-6 shadow-2xl transform hover:scale-110 transition-transform duration-300">
             <span className="text-3xl">🪄</span>
@@ -83,7 +81,6 @@ export default function EmojiPromptPage() {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 items-start">
-          {/* Input Section */}
           <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 border border-gray-200 shadow-2xl hover:shadow-purple-400/20 transition-all duration-500">
             <div className="space-y-6">
               <div>
@@ -132,7 +129,6 @@ export default function EmojiPromptPage() {
             </div>
           </div>
 
-          {/* Result Section */}
           <div className="space-y-6">
             {image && (
               <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 border border-gray-200 shadow-2xl transform animate-fade-in">
@@ -197,7 +193,6 @@ export default function EmojiPromptPage() {
           </div>
         </div>
 
-        {/* Feature highlights */}
         <div className="mt-16 grid md:grid-cols-3 gap-6">
           <div className="text-center p-6 bg-white/50 backdrop-blur rounded-2xl border border-gray-100">
             <div className="text-4xl mb-3">⚡</div>

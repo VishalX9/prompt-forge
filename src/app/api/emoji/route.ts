@@ -2,7 +2,6 @@ import { NextResponse ,NextRequest} from "next/server";
 import { GoogleGenAI, Modality } from "@google/genai";
 
 
-// Initialize Gemini with API key from environment
 const genAI = new GoogleGenAI({
   apiKey: process.env.GEMINI_KEY,
 });
@@ -16,7 +15,6 @@ export async function POST(req: NextRequest) {
     }
     
     
-    // Step 1: Generate Image (TEXT + IMAGE modality required)
     const imageResponse = await genAI.models.generateContent({
       model: "gemini-2.0-flash-preview-image-generation",
       contents: [
@@ -45,7 +43,6 @@ export async function POST(req: NextRequest) {
 
     const imageUrl = `data:image/png;base64,${imagePart.inlineData.data}`;
 
-    // Step 2: Generate Description (only TEXT)
     const descriptionPrompt = `Provide a concise, creative description of an emoji based on the following prompt: "${promptText}". The description should be 1-2 sentences, capturing the essence and style of the emoji.`;
 
     const descriptionResponse = await genAI.models.generateContent({
@@ -78,7 +75,6 @@ export async function POST(req: NextRequest) {
 
     
 
-    // ✅ Return image and description
     return NextResponse.json(
       {
         success: true,

@@ -32,7 +32,6 @@ const LandingPage = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
 
-            {/* Hero Section */}
             <section className="px-6 pt-20 pb-20 text-center">
                 <div className="max-w-4xl mx-auto">
                     <img 
@@ -62,7 +61,6 @@ const LandingPage = () => {
                 </div>
             </section>
 
-            {/* Features Showcase */}
             <section className="px-6 py-20 bg-white/50">
                 <div className="max-w-6xl mx-auto">
                     <h3 className="text-4xl font-bold text-center mb-16 text-gray-900">
@@ -88,7 +86,6 @@ const LandingPage = () => {
                 </div>
             </section>
 
-            {/* Benefits Section */}
             <section className="px-6 py-20">
                 <div className="max-w-4xl mx-auto text-center">
                     <h3 className="text-4xl font-bold mb-12 text-gray-900">Why Choose Prompt Forge?</h3>
@@ -110,7 +107,6 @@ const LandingPage = () => {
                 </div>
             </section>
 
-            {/* CTA Section */}
             <section className="px-6 py-20 bg-gradient-to-r from-gray-900 to-sky-900">
                 <div className="max-w-4xl mx-auto text-center text-white">
                     <h3 className="text-4xl font-bold mb-6">Ready to Transform Your Ideas?</h3>
@@ -125,7 +121,6 @@ const LandingPage = () => {
                 </div>
             </section>
 
-            {/* Footer */}
             <footer className="px-6 py-12 bg-gray-900 text-white">
                 <div className="max-w-6xl mx-auto text-center">
                     <div className="flex items-center justify-center space-x-2 mb-4">

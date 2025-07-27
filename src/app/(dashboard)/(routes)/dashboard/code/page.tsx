@@ -17,11 +17,9 @@ import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
 
-// Simple utility function to combine class names
 const cn = (...classes: (string | undefined)[]) =>
   classes.filter(Boolean).join(" ");
 
-// Simple form validation
 const validateForm = (prompt: string) => {
   return prompt.trim().length > 0;
 };

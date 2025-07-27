@@ -1,4 +1,4 @@
-// types/react-syntax-highlighter.d.ts
+
 declare module 'react-syntax-highlighter' {
   export * from 'react-syntax-highlighter/dist/esm';
   export { Prism } from 'react-syntax-highlighter/dist/esm/prism';

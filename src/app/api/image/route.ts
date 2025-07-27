@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
 
 
         
-    // Step 1: Generate image
+
    const imageResponse = await genAI.models.generateContent({
   model: "gemini-2.0-flash-preview-image-generation",
   contents: [
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     },
   ],
   config: {
-    responseModalities: [Modality.TEXT, Modality.IMAGE], // ✅ Fix applied here
+    responseModalities: [Modality.TEXT, Modality.IMAGE],
   },
 });
 
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
 
     const imageUrl = `data:image/png;base64,${imagePart.inlineData.data}`;
 
-    // Step 2: Generate description
+   
     const descriptionPrompt = `Provide a 1-2 sentence description for an emoji with this concept: "${prompt}"`;
 
     const descriptionResponse = await genAI.models.generateContent({
